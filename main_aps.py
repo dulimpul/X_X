@@ -1,10 +1,9 @@
-from distutils import command
-from multiprocessing import Value
 import tkinter as tk
-from tkinter import Button, ttk
+from tkinter import ttk
 from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
-from tkinter import messagebox as ms
+from pdfminer import high_level
+
 
 
 
@@ -51,7 +50,7 @@ class App(tk.Tk):
         # open desk fungsi
         self.openfile = fd.askopenfilename(
             title='open file',
-            initialdir='/home/MRDNS',
+            initialdir='/home/MRDNS/Documents/python/project_python/lab_ujicoba/gui_ujicoba/gui_pdf_dan_file',
             filetypes= self.file_tipe
         )
 
@@ -65,6 +64,10 @@ class App(tk.Tk):
         self.reks1.place(x=56, y=60)
         self.reks1.insert(tk.END, self.openfile,)
 
+        global linkse
+        linkse = self.openfile
+       
+       
     # membut open window Run
     def open_window_run(self):
            
@@ -72,7 +75,7 @@ class App(tk.Tk):
             showinfo(
                 title = "No select file",
                 message="No file selected"
-            )                                      # <----------- error hendling
+            )                                     
         elif not self.openfile:
              showinfo(
                 title = "No select file",
@@ -89,8 +92,28 @@ class Run_sektor(tk.Toplevel):    # sektor update nanti
     def __init__(self):
         super().__init__()
         self.geometry("1000x700")
+        prc = Procec()
+        self.reks1 = tk.Text(
+            self,
+            height=2,
+            width=35,
+            
+        )
+        self.reks1.place(x=56, y=60)
+        self.reks1.insert(tk.END,prc.extrack_hasil)
 
-       # <--------- sektor logika dan visualisasi data 
+
+class Procec():
+
+    def __init__(self):
+        lnk = App
+        path = linkse
+        pages = [0] # page 1
+        self.extrack_hasil = high_level.extract_text(path, "",pages)
+        
+
+class Visualisasi:   #< ---- sektor visual
+    pass
 
     
 apps = App()
